@@ -37,7 +37,8 @@
         map.data.setStyle(function(feature) {
           var magnitude = feature.getProperty('mag');
           return {
-            icon: getCircle(magnitude)
+            icon: getCircle(magnitude),
+            label: magnitude
           };
         });
       }
