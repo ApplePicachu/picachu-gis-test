@@ -1,0 +1,23 @@
+{
+  "name": "picachu-gis-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://ApplePicachu@github.com/ApplePicachu/picachu-gis-test.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ApplePicachu/picachu-gis-test/issues"
+  },
+  "homepage": "https://github.com/ApplePicachu/picachu-gis-test#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
