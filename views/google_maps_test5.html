@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <meta charset="utf-8">
+  <title>Info window with
+    <code>maxWidth</code>
+  </title>
+  <style>
+    /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+
+    #map {
+      height: 100%;
+    }
+
+    /* Optional: Makes the sample page fill the window. */
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="map"></div>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script>
+
+    // This example displays a marker at the center of Australia.
+    // When the user clicks the marker, an info window opens.
+    // The maximum width of the info window is set to 200 pixels.
+
+    function initMap() {
+      var uluru = { lat: -25.363, lng: 131.044 };
+      var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 4,
+        center: uluru
+      });
+
+      var contentString = '<div id="chart_div" style="width: 400px; height: 150px;"></div>';
+
+      var infowindow = new google.maps.InfoWindow({
+        content: contentString
+      });
+
+      var marker = new google.maps.Marker({
+        position: uluru,
+        map: map,
+        title: 'Uluru (Ayers Rock)'
+      });
+      marker.addListener('click', function () {
+        infowindow.open(map, marker);
+        drawChart();
+      });
+    }
+    google.charts.load('current', { 'packages': ['gauge'] });
+
+    function drawChart() {
+
+      var data = google.visualization.arrayToDataTable([
+        ['Label', 'Value'],
+        ['Memory', 80],
+        ['CPU', 55],
+        ['Network', 68]
+      ]);
+
+      var options = {
+        width: 400, height: 120,
+        redFrom: 90, redTo: 100,
+        yellowFrom: 75, yellowTo: 90,
+        minorTicks: 5
+      };
+
+      var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
+
+      chart.draw(data, options);
+
+      setInterval(function () {
+        data.setValue(0, 1, 40 + Math.round(60 * Math.random()));
+        chart.draw(data, options);
+      }, 13000);
+      setInterval(function () {
+        data.setValue(1, 1, 40 + Math.round(60 * Math.random()));
+        chart.draw(data, options);
+      }, 5000);
+      setInterval(function () {
+        data.setValue(2, 1, 60 + Math.round(20 * Math.random()));
+        chart.draw(data, options);
+      }, 26000);
+    }
+  </script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDH1dHbwVnHC8n0w2tXOUi0tp5jbJT4p7E&callback=initMap"></script>
+
+</body>
+
+</html>
