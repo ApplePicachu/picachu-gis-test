@@ -1,8 +1,30 @@
+<!DOCTYPE html>
 <html>
 
 <head>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <meta charset="utf-8">
+  <title>Info window with
+    <code>maxWidth</code>
+  </title>
   <style>
+    /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+
+    #map {
+      height: 100%;
+    }
+
+    /* Optional: Makes the sample page fill the window. */
+
+    html,
     body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    div.contentBackground {
       background: #7f7f7f;
     }
 
@@ -16,8 +38,62 @@
       line-height: 50px;
     }
   </style>
+</head>
+
+<body>
+  <div id="map"></div>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-  <script type="text/javascript">
+  <script>
+
+    // This example displays a marker at the center of Australia.
+    // When the user clicks the marker, an info window opens.
+    // The maximum width of the info window is set to 200 pixels.
+
+    function initMap() {
+      var uluru = { lat: -25.363, lng: 131.044 };
+      var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 4,
+        center: uluru
+      });
+
+      var contentString = `<div class=contentBackground><div class="like-table" style="width: 100%">
+    <div style="width: 100%">Test</div>
+  </div>
+  <table>
+    <tr>
+      <td>
+        <div id="curve_chart" style="width: 290px; height: 100px"></div>
+      </td>
+      <td>
+        <div id="curve_chart2" style="width: 290px; height: 100px"></div>
+      </td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+      <td>
+        <div id="chart_div" style="width: 360px; height: 120px;"></div>
+      </td>
+      <td>
+        <div id="piechart" style="width: 180px; height: 120px"></div>
+      </td>
+    </tr>
+  </table></div>`;
+
+      var infowindow = new google.maps.InfoWindow({
+        content: contentString
+      });
+
+      var marker = new google.maps.Marker({
+        position: uluru,
+        map: map,
+        title: 'Uluru (Ayers Rock)'
+      });
+      marker.addListener('click', function () {
+        infowindow.open(map, marker);
+        drawChart();
+      });
+    }
     google.charts.load('current', { 'packages': ['gauge', 'corechart'] });
     google.charts.setOnLoadCallback(drawChart);
 
@@ -89,8 +165,8 @@
       var pieOptions = {
         backgroundColor: 'transparent',
         pieHole: 0.4,
-        legend:{position: 'right', alignment: 'center'},
-        chartArea:{left:-20,top:0,width:'100%',height:'95%'}
+        legend: { position: 'right', alignment: 'center' },
+        chartArea: { left: -20, top: 0, width: '100%', height: '95%' }
       };
 
       var pieChart = new google.visualization.PieChart(document.getElementById('piechart'));
@@ -98,32 +174,7 @@
       pieChart.draw(pieData, pieOptions);
     }
   </script>
-</head>
-
-<body>
-  <div class="like-table" style="width: 100%">
-    <div style="width: 100%">Test</div>
-  </div>
-  <table>
-    <tr>
-      <td>
-        <div id="curve_chart" style="width: 290px; height: 100px"></div>
-      </td>
-      <td>
-        <div id="curve_chart2" style="width: 290px; height: 100px"></div>
-      </td>
-    </tr>
-  </table>
-  <table>
-    <tr>
-      <td>
-        <div id="chart_div" style="width: 360px; height: 120px;"></div>
-      </td>
-      <td>
-        <div id="piechart" style="width: 180px; height: 120px"></div>
-      </td>
-    </tr>
-  </table>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDH1dHbwVnHC8n0w2tXOUi0tp5jbJT4p7E&callback=initMap"></script>
 
 </body>
 
