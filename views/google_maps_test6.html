@@ -25,7 +25,7 @@
     }
 
     div.contentBackground {
-      background: #7f7f7f;
+      /* background: #7f7f7f; */
     }
 
     .like-table div {
@@ -34,8 +34,13 @@
       font-size: 20px;
       text-align: center;
       background: #44a2b0;
-      height: 50px;
-      line-height: 50px;
+      height: 40px;
+      line-height: 40px;
+    }
+
+    .gauge svg>g>text:first-of-type {
+      /*select "text" which parent is "g" and grandparent is "svg" */
+      font-size: 12px;
     }
   </style>
 </head>
@@ -50,32 +55,38 @@
     // The maximum width of the info window is set to 200 pixels.
 
     function initMap() {
-      var uluru = { lat: -25.363, lng: 131.044 };
+      var telstra_eac1 = { lat: 25.160654, lng: 121.412815 };
       var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 4,
-        center: uluru
+        center: telstra_eac1
       });
 
       var contentString = `<div class=contentBackground><div class="like-table" style="width: 100%">
-    <div style="width: 100%">Test</div>
+    <div style="width: 100%">Telstra EAC1</div>
   </div>
   <table>
     <tr>
       <td>
-        <div id="curve_chart" style="width: 290px; height: 100px"></div>
+        <div id="curve_chart" style="width: 320px; height: 150px"></div>
       </td>
       <td>
-        <div id="curve_chart2" style="width: 290px; height: 100px"></div>
+        <div id="curve_chart2" style="width: 320px; height: 150px"></div>
       </td>
     </tr>
   </table>
   <table>
     <tr>
       <td>
-        <div id="chart_div" style="width: 360px; height: 120px;"></div>
+        <div class="gauge" id="gauge_div1" style="width: 140px; height: 140px;"></div>
       </td>
       <td>
-        <div id="piechart" style="width: 180px; height: 120px"></div>
+        <div class="gauge" id="gauge_div2" style="width: 140px; height: 140px;"></div>
+      </td>
+      <td>
+        <div class="gauge" id="gauge_div3" style="width: 140px; height: 140px;"></div>
+      </td>
+      <td>
+        <div id="piechart" style="width: 210px; height: 140px"></div>
       </td>
     </tr>
   </table></div>`;
@@ -85,94 +96,178 @@
       });
 
       var marker = new google.maps.Marker({
-        position: uluru,
+        position: telstra_eac1,
         map: map,
-        title: 'Uluru (Ayers Rock)'
+        title: 'Telstra EAC1'
       });
       marker.addListener('click', function () {
         infowindow.open(map, marker);
         drawChart();
       });
+      infowindow.open(map, marker);
     }
     google.charts.load('current', { 'packages': ['gauge', 'corechart'] });
     google.charts.setOnLoadCallback(drawChart);
 
     function drawChart() {
 
-      var data = google.visualization.arrayToDataTable([
-        ['Label', 'Value'],
-        ['Memory', 80],
-        ['CPU', 55],
-        ['Network', 68]
-      ]);
-
-      var options = {
-        width: 400, height: 120,
-        redFrom: 90, redTo: 100,
-        yellowFrom: 75, yellowTo: 90,
-        minorTicks: 5
-      };
-
-      var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
-
-      chart.draw(data, options);
-
-      setInterval(function () {
-        data.setValue(0, 1, 40 + Math.round(60 * Math.random()));
-        chart.draw(data, options);
-      }, 13000);
-      setInterval(function () {
-        data.setValue(1, 1, 40 + Math.round(60 * Math.random()));
-        chart.draw(data, options);
-      }, 5000);
-      setInterval(function () {
-        data.setValue(2, 1, 60 + Math.round(20 * Math.random()));
-        chart.draw(data, options);
-      }, 26000);
-
       var dailyPowerData = google.visualization.arrayToDataTable([
-        ['Year', 'Sales', 'Expenses'],
-        ['2004', 1000, 400],
-        ['2005', 1170, 460],
-        ['2006', 660, 1120],
-        ['2007', 1030, 540]
+        ['Hour', 'Yesterday', 'Today'],
+        [0, 337.5, 326.5],
+        [1, 312.5, 321.5],
+        [2, 310, 302],
+        [3, 307.5, 354.5],
+        [4, 305, 324],
+        [5, 325, 286],
+        [6, 262.5, 300],
+        [7, 395, 363],
+        [8, 350, 352],
+        [9, 372.5, 419.5],
+        [10, 387.5, 364.5],
+        [11, 420, 399],
+        [12, 405, 414],
+        [13, 437.5, 479.5],
+        [14, 427.5, 447.5],
+        [15, 440, 401],
+        [16, 430, 434],
+        [17, 402.5, 448.5],
+        [18, 390, 376],
+        [19, 367.5, 405.5],
+        [20, 357.5, 383.5],
+        [21, 355, 398],
+        [22, 387.5, 432.5],
+        [23, 342.5, 366.5]
       ]);
 
-      var lineChartOptions = {
-        title: 'Company Performance',
+      var dailyLineChartOptions = {
+        title: 'Daily Power Consumption',
         curveType: 'function',
         legend: { position: 'bottom' },
         backgroundColor: 'transparent',
-        // chartArea:{left:0,top:0,width:200,height:200}
+        vAxes: {
+          // Adds titles to each axis.
+          0: { title: 'kWh' },
+        },
+        hAxis: {
+          title: 'Hour'
+        }
       };
 
-      var lineChart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+      var dailyLineChart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+      dailyLineChart.draw(dailyPowerData, dailyLineChartOptions);
 
-      lineChart.draw(dailyPowerData, lineChartOptions);
 
-      var lineChart2 = new google.visualization.LineChart(document.getElementById('curve_chart2'));
-      lineChart2.draw(dailyPowerData, lineChartOptions);
+      var monthlyPowerData = google.visualization.arrayToDataTable([
+        ['Month', 'Last Year', 'This Year'],
+        [new Date(2017, 2), 289.46, 222.89],
+        [new Date(2017, 3), 224.77, 159.58],
+        [new Date(2017, 4), 248.40, 181.33],
+        [new Date(2017, 5), 269.74, 207.70],
+        [new Date(2017, 6), 296.82, 216.68],
+        [new Date(2017, 7), 339.90, 244.73],
+        [new Date(2017, 8), 391.22, 281.68],
+        [new Date(2017, 9), 412.01, 309.01],
+        [new Date(2017, 10), 406.80, 296.96],
+        [new Date(2017, 11), 372.24, 264.29],
+        [new Date(2018, 0), 352.62, 246.83],
+        [new Date(2018, 1), 295.10, 209.52],
+        [new Date(2018, 2), 260.47, 205.78],
+      ]);
+
+      var monthlyLineChartOptions = {
+        title: 'Monthly Power Consumption',
+        curveType: 'function',
+        legend: { position: 'bottom' },
+        backgroundColor: 'transparent',
+        vAxes: {
+          // Adds titles to each axis.
+          0: { title: 'MWh' },
+        },
+        hAxis: {
+          title: 'Month',
+          // ticks: [new Date(2017, 3), new Date(2017, 4), new Date(2017, 5), new Date(2017, 6),
+          // new Date(2017, 7), new Date(2017, 8), new Date(2017, 9), new Date(2017, 10),
+          // new Date(2017, 11), new Date(2018, 0), new Date(2018, 1), new Date(2018, 2)
+          // ],
+          format:'y-MMM'
+        },
+      };
+      var monthlyLineChart = new google.visualization.LineChart(document.getElementById('curve_chart2'));
+      monthlyLineChart.draw(monthlyPowerData, monthlyLineChartOptions);
+
+
+      var gauge1Data = google.visualization.arrayToDataTable([
+        ['Label', 'Value'],
+        ['Power Demand(kW)', 350]
+      ]);
+      var gauge1Options = {
+        max: 550, min: 0,
+        yellowFrom: 450, yellowTo: 500,
+        redFrom: 500, redTo: 550,
+        minorTicks: 5,
+        majorTicks: ["0", "50", "100", "150"]
+      };
+      var gauge1 = new google.visualization.Gauge(document.getElementById('gauge_div1'));
+      gauge1.draw(gauge1Data, gauge1Options);
+
+
+      var gauge2Data = google.visualization.arrayToDataTable([
+        ['Label', 'Value'],
+        ['PUE', 1.4]
+      ]);
+      var gauge2Options = {
+        max: 3, min: 1,
+        yellowFrom: 2, yellowTo: 2.5,
+        redFrom: 2.5, redTo: 3,
+        minorTicks: 5,
+        majorTicks: [1, 1.5, 2, 2.5, 3]
+      };
+      var gauge2 = new google.visualization.Gauge(document.getElementById('gauge_div2'));
+      gauge2.draw(gauge2Data, gauge2Options);
+
+
+      var gauge3Data = google.visualization.arrayToDataTable([
+        ['Label', 'Value'],
+        ['System Health(%)', 100]
+      ]);
+      var gauge3Options = {
+        max: 100, min: 0,
+        greenFrom: 95, greenTo: 100,
+        majorTicks: ["0", "50", "100"],
+        minorTicks: 5
+      };
+      var gauge3 = new google.visualization.Gauge(document.getElementById('gauge_div3'));
+      gauge3.draw(gauge3Data, gauge3Options);
+
+
+      setInterval(function () {
+        var total = 350+ Math.round(10 * Math.random());
+        gauge1Data.setValue(0, 1, total);
+        gauge1.draw(gauge1Data, gauge1Options);
+        gauge2Data.setValue(0, 1, total/250);
+        gauge2.draw(gauge2Data, gauge2Options);
+      }, 5000);
 
       var pieData = google.visualization.arrayToDataTable([
-        ['Task', 'Hours per Day'],
-        ['Work', 11],
-        ['Eat', 2],
-        ['Commute', 2],
-        ['Watch TV', 2],
-        ['Sleep', 7]
+        ['Classification', 'Percentage'],
+        ['IT Equip.', 52.6],
+        ['A/C', 40.2],
+        ['Lighting', 2.3],
+        ['Others', 4.9]
       ]);
 
       var pieOptions = {
         backgroundColor: 'transparent',
         pieHole: 0.4,
         legend: { position: 'right', alignment: 'center' },
-        chartArea: { left: -20, top: 0, width: '100%', height: '95%' }
+        chartArea: { left: 10, top: 10, width: '90%', height: '90%' }
       };
 
       var pieChart = new google.visualization.PieChart(document.getElementById('piechart'));
 
       pieChart.draw(pieData, pieOptions);
     }
+
   </script>
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDH1dHbwVnHC8n0w2tXOUi0tp5jbJT4p7E&callback=initMap"></script>
 
