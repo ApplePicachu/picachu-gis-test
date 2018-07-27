@@ -109,6 +109,16 @@
     google.charts.load('current', { 'packages': ['gauge', 'corechart'] });
     google.charts.setOnLoadCallback(drawChart);
 
+    function httpGetAsync(theUrl, callback) {
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.onreadystatechange = function () {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+          callback(xmlHttp.responseText);
+      }
+      xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+      xmlHttp.send(null);
+    }
+
     function drawChart() {
 
       var dailyPowerData = google.visualization.arrayToDataTable([
@@ -189,7 +199,7 @@
           // new Date(2017, 7), new Date(2017, 8), new Date(2017, 9), new Date(2017, 10),
           // new Date(2017, 11), new Date(2018, 0), new Date(2018, 1), new Date(2018, 2)
           // ],
-          format:'y-MMM'
+          format: 'y-MMM'
         },
       };
       var monthlyLineChart = new google.visualization.LineChart(document.getElementById('curve_chart2'));
@@ -241,11 +251,16 @@
 
 
       setInterval(function () {
-        var total = 350+ Math.round(10 * Math.random());
-        gauge1Data.setValue(0, 1, total);
-        gauge1.draw(gauge1Data, gauge1Options);
-        gauge2Data.setValue(0, 1, total/250);
-        gauge2.draw(gauge2Data, gauge2Options);
+        httpGetAsync('https://picachu-gis-test.herokuapp.com/power', (res) => {
+          // var total = 350 + Math.round(10 * Math.random());
+          console.log(res);
+          var total = res;
+          gauge1Data.setValue(0, 1, total);
+          gauge1.draw(gauge1Data, gauge1Options);
+          gauge2Data.setValue(0, 1, total / 250);
+          gauge2.draw(gauge2Data, gauge2Options);
+        });
+
       }, 5000);
 
       var pieData = google.visualization.arrayToDataTable([
