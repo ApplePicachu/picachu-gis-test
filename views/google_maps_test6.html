@@ -208,7 +208,7 @@
 
       var gauge1Data = google.visualization.arrayToDataTable([
         ['Label', 'Value'],
-        ['Power Demand(kW)', 350]
+        ['Power Demand(kW)', 0]
       ]);
       var gauge1Options = {
         max: 550, min: 0,
@@ -261,7 +261,7 @@
           gauge2.draw(gauge2Data, gauge2Options);
         });
 
-      }, 5000);
+      }, 1000);
 
       var pieData = google.visualization.arrayToDataTable([
         ['Classification', 'Percentage'],
