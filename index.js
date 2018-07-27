@@ -4,7 +4,7 @@ const fs = require('fs');
 //Express init.
 const app = Express();
 app.get('/', (req, res) =>{
-    res.sendfile('./views/index.html');
+    res.sendfile('./index.html');
 });
 app.get('/power',(req, res)=>{
     res.send((350+ Math.round(10 * Math.random())).toString());
