@@ -7,7 +7,7 @@
 	{
 		margin: 0px;
 		padding: 0px;
-		background: #2056ac;
+		background: #00b2a9;
 		font-family: 'Questrial', sans-serif;
 		font-size: 12pt;
 		color: rgba(0,0,0,.6);
@@ -299,7 +299,7 @@
 	.title .byline
 	{
 		font-size: 1.1em;
-		color: #6F6F6F#;
+		color: #6F6F6F;
 	}
 
 /*********************************************************************************/
@@ -309,7 +309,7 @@
 	#header-wrapper
 	{
 		overflow: hidden;
-		background: #2056ac;
+		background: #00b2a9;
 	}
 
 	#header
@@ -392,7 +392,7 @@
 	{
 		background: #FFF;
 		border-radius: 7px 7px 0px 0px;
-		color: #2056ac;
+		color: #005C59;
 	}
 	
 	#menu .current_page_item a
