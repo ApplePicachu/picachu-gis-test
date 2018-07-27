@@ -7,7 +7,7 @@ app.get('/', (req, res) =>{
     res.send('hello world');
 });
 app.get('/power',(req, res)=>{
-    res.send(350+ Math.round(10 * Math.random()));
+    res.send((350+ Math.round(10 * Math.random())).toString());
 })
 app.use('/views', Express.static('views'));
 app.listen(process.env.PORT || 8080);
