@@ -9,5 +9,5 @@ const app = Express();
 app.get('/power',(req, res)=>{
     res.send((350+ Math.round(10 * Math.random())).toString());
 })
-app.use('/', Express.static('views'));
+app.use('/', Express.static('views2'));
 app.listen(process.env.PORT || 8080);
